@@ -15,12 +15,8 @@ public class BotApiRegistrar {
     private final TelegramBotsApi telegramBotsApi;
 
     @PostConstruct
-    public void registerBot() {
-        try {
-            telegramBotsApi.registerBot(vfsTrackerBot);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
+    public void registerBot() throws TelegramApiException {
+        telegramBotsApi.registerBot(vfsTrackerBot);
     }
 
 }
