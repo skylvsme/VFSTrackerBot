@@ -6,6 +6,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -37,7 +38,7 @@ public class ApplicationChecker {
     }
 
     @SneakyThrows
-    public String getApplicationStatus(String[] referenceNumberParts, String birthDate) {
+    public ApplicationCheckEvent getApplicationStatus(String[] referenceNumberParts, String birthDate) {
         val seleniumURL = String.format("http://%s:%s", seleniumHost, seleniumPort);
         log.info("Using Selenium connect to {}", seleniumURL);
 
@@ -58,11 +59,15 @@ public class ApplicationChecker {
 
         driver.findElement(By.id("ctl00_CPH_btnDOB")).click();
 
-        val result = driver.findElement(By.className("fnstatus")).getText();
-
-        driver.quit();
-
-        return result;
+        try {
+            val result = driver.findElement(By.className("fnstatus")).getText();
+            return new ApplicationCheckEvent(result, false);
+        } catch (NoSuchElementException e) {
+            val result = driver.findElement(By.id("ctl00_CPH_divError")).getText();
+            return new ApplicationCheckEvent(result, true);
+        } finally {
+            driver.quit();
+        }
     }
 
 }

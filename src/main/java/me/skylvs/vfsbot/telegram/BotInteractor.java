@@ -91,11 +91,22 @@ public class BotInteractor {
 
         val status = checker.getApplicationStatus(validateReferenceNumber(session.getReferenceNumber()), session.getBirthDate());
 
-        if (!Objects.equals(session.getApplicationStatus(), status)) {
-            session.setApplicationStatus(status);
+        if (status.isError()) {
+            session.setStage(REF_NUMBER_WAITING);
             sessionRepository.save(session);
 
-            bot.execute(new SendMessage(session.getChatId().toString(), status));
+            val sndMessage = new SendMessage(session.getChatId().toString(), String.format(Constants.INVALID_DATA, status.getResponse(), session.getReferenceNumber(), session.getBirthDate()));
+            sndMessage.setParseMode("markdown");
+            bot.execute(sndMessage);
+            log.info("Error message sent to {}", session.getReferenceNumber());
+            return;
+        }
+
+        if (!Objects.equals(session.getApplicationStatus(), status.getResponse())) {
+            session.setApplicationStatus(status.getResponse());
+            sessionRepository.save(session);
+
+            bot.execute(new SendMessage(session.getChatId().toString(), status.getResponse()));
         }
     }
 
