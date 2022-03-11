@@ -15,5 +15,5 @@ services:
     depends_on: [database]
     environment:
       - DATABASE_HOST=database
-      - DATABASE_PORT=5444
+      - DATABASE_PORT=5432
       - BOT_TOKEN=5205728499:AAGNq1y7CebEnpG93ymfZbJM5YiU26s3Xgk
