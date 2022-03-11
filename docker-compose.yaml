@@ -1,0 +1,7 @@
+version: '3.7'
+services:
+  vfstrackerbot:
+    image: maksimhawkins/vfs-tracker-bot:latest
+    build:
+      context: ""
+      dockerfile: Dockerfile

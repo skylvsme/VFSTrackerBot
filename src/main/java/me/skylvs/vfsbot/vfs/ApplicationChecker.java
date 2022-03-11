@@ -2,31 +2,48 @@ package me.skylvs.vfsbot.vfs;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ApplicationChecker {
 
+    @Value("${selenium.remote.host}")
+    private String seleniumHost;
+
+    @Value("${selenium.remote.port}")
+    private String seleniumPort;
+
     @PostConstruct
     public void setupDrivers() {
-        WebDriverManager.firefoxdriver().setup();
+        WebDriverManager.chromedriver().setup();
     }
 
+    @SneakyThrows
     public String getApplicationStatus(String[] referenceNumberParts, String birthDate) {
-        val options = new FirefoxOptions();
-        options.setBinary(new FirefoxBinary());
-        options.setHeadless(true);
+        val seleniumURL = String.format("http://%s:%s", seleniumHost, seleniumPort);
+        log.info("Using Selenium connect to {}", seleniumURL);
 
-        val driver = new FirefoxDriver(options);
+        val options = new ChromeOptions();
+
+        val driver = new RemoteWebDriver(new URL(seleniumURL), options);
 
         driver.get("https://www.vfsvisaservicesrussia.com/poland-Russia-tracking_new/trackingParam.aspx?P=ri7FHohe3VirNKmyLaRu36t9/pEItw3gfYXFtDFlxVY=");
 

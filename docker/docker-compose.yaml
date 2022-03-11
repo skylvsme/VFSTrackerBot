@@ -10,10 +10,16 @@ services:
       - POSTGRES_PASSWORD=localpassword
       - POSTGRES_DB=vfstracker
 
+  selenium:
+    image: selenium/standalone-chrome
+    ports:
+      - "4444:4444"
+
   vfsbot:
-    image: vfstrackerbot:latest
-    depends_on: [database]
+    image: maksimhawkins/vfs-tracker-bot:latest
+    depends_on: [database, selenium]
     environment:
       - DATABASE_HOST=database
       - DATABASE_PORT=5432
       - BOT_TOKEN=5205728499:AAGNq1y7CebEnpG93ymfZbJM5YiU26s3Xgk
+      - SELENIUM_HOST=selenium
