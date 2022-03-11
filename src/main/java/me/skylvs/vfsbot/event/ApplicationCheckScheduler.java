@@ -8,6 +8,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.concurrent.TimeUnit;
+
 import static me.skylvs.vfsbot.user.UserSessionState.READY;
 
 @Slf4j
@@ -18,7 +20,7 @@ public class ApplicationCheckScheduler {
     private final UserSessionRepository sessionRepository;
     private final BotInteractor interactor;
 
-    @Scheduled(cron = "@hourly")
+    @Scheduled(fixedDelay = 1, timeUnit = TimeUnit.HOURS)
     public void checkApplications() {
         sessionRepository.findByStage(READY).forEach(session -> {
             try {

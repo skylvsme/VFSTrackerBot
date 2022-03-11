@@ -55,6 +55,7 @@ public class BotInteractor {
     @SneakyThrows
     private void onUserSendMessage(UserSession session, Message message) {
         val text = message.getText();
+        log.info("Received message: {}", text);
         if (session.getStage() == REF_NUMBER_WAITING) {
             val parts = validateReferenceNumber(text);
             if (parts == null)
@@ -74,6 +75,8 @@ public class BotInteractor {
                 session.setBirthDate(text);
                 session.setStage(READY);
                 sessionRepository.save(session);
+
+                bot.execute(new SendMessage(message.getChatId().toString(), Constants.READY_TO_GO));
 
                 sendUserApplicationStatus(session);
             } else {

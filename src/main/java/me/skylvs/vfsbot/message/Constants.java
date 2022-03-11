@@ -15,4 +15,6 @@ public class Constants {
 
     public static final String INVALID_BIRTHDATE_FORMAT = "Неверный формат даты рождения. Формат - DD/MM/YYYY";
 
+    public static final String READY_TO_GO = "Спасибо! Теперь вам будут приходить уведомления об обновлении статуса визового заявления.";
+
 }
