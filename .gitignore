@@ -34,3 +34,4 @@ build/
 
 /docker/storage/
 /.jpb/
+!/docker/launch/storage/

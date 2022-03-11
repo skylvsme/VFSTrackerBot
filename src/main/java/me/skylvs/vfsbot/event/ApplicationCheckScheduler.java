@@ -18,7 +18,7 @@ public class ApplicationCheckScheduler {
     private final UserSessionRepository sessionRepository;
     private final BotInteractor interactor;
 
-    @Scheduled(cron = "* * 0 * * ?")
+    @Scheduled(cron = "@hourly")
     public void checkApplications() {
         sessionRepository.findByStage(READY).forEach(session -> {
             try {
