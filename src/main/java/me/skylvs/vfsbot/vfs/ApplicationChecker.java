@@ -26,7 +26,7 @@ public class ApplicationChecker {
         options.setBinary(new FirefoxBinary());
         options.setHeadless(true);
 
-        val driver = new FirefoxDriver();
+        val driver = new FirefoxDriver(options);
 
         driver.get("https://www.vfsvisaservicesrussia.com/poland-Russia-tracking_new/trackingParam.aspx?P=ri7FHohe3VirNKmyLaRu36t9/pEItw3gfYXFtDFlxVY=");
 

@@ -1,0 +1,19 @@
+version: '3'
+services:
+  database:
+    image: postgres:11
+    ports:
+      - "5444:5432"
+    volumes:
+      - ./storage/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=localpassword
+      - POSTGRES_DB=vfstracker
+
+  vfsbot:
+    image: vfstrackerbot:latest
+    depends_on: [database]
+    environment:
+      - DATABASE_HOST=database
+      - DATABASE_PORT=5444
+      - BOT_TOKEN=5205728499:AAGNq1y7CebEnpG93ymfZbJM5YiU26s3Xgk

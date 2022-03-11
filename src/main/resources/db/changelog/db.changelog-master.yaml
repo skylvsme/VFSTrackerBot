@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: skylvsme
+      changes:
+        - createTable:
+            tableName: session
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: chat_id
+                  type: bigint
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: reference_number
+                  type: varchar(255)
+              - column:
+                  name: birthdate
+                  type: varchar(255)
+              - column:
+                  name: application_status
+                  type: text
+              - column:
+                  name: stage
+                  type: varchar(32)
