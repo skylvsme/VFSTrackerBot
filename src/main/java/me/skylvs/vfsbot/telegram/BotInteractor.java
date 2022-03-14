@@ -9,7 +9,6 @@ import me.skylvs.vfsbot.user.UserSession;
 import me.skylvs.vfsbot.user.UserSessionRepository;
 import me.skylvs.vfsbot.vfs.ApplicationChecker;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.send.SendAnimation;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -78,15 +77,27 @@ public class BotInteractor {
 
                 bot.execute(new SendMessage(message.getChatId().toString(), Constants.READY_TO_GO));
 
-                sendUserApplicationStatus(session);
+                sendUserApplicationStatus(session, false);
             } else {
                 bot.execute(new SendMessage(message.getChatId().toString(), Constants.INVALID_BIRTHDATE_FORMAT));
             }
             return;
         }
+
+        if (session.getStage() == READY) {
+            onUserStatusRequested(session);
+        }
     }
 
-    public void sendUserApplicationStatus(UserSession session) throws TelegramApiException {
+    private void onUserStatusRequested(UserSession session) {
+        try {
+            sendUserApplicationStatus(session, true);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendUserApplicationStatus(UserSession session, Boolean sendIfEquals) throws TelegramApiException {
         if (session.getReferenceNumber() == null || session.getBirthDate() == null) return;
 
         val status = checker.getApplicationStatus(validateReferenceNumber(session.getReferenceNumber()), session.getBirthDate());
@@ -102,7 +113,7 @@ public class BotInteractor {
             return;
         }
 
-        if (!Objects.equals(session.getApplicationStatus(), status.getResponse())) {
+        if (sendIfEquals || !Objects.equals(session.getApplicationStatus(), status.getResponse())) {
             session.setApplicationStatus(status.getResponse());
             sessionRepository.save(session);
 

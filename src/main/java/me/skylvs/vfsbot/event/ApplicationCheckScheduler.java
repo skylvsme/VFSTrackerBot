@@ -24,7 +24,7 @@ public class ApplicationCheckScheduler {
     public void checkApplications() {
         sessionRepository.findByStage(READY).forEach(session -> {
             try {
-                interactor.sendUserApplicationStatus(session);
+                interactor.sendUserApplicationStatus(session, false);
             } catch (TelegramApiException e) {
                 log.error("Failed to check application: ", e);
             }

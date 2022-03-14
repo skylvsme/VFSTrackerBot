@@ -25,4 +25,5 @@ public class Constants {
             "\n" +
             "Так же напоминаем, что бот будет функционировать только если вы приобретали услугу отслеживания статуса заявления непосредственно при его подаче в VFS Global. Советуем перейти по [ссылке](https://www.vfsvisaservicesrussia.com/poland-Russia-tracking_new/trackingParam.aspx?P=ri7FHohe3VirNKmyLaRu36t9/pEItw3gfYXFtDFlxVY=) и попробовать отследить статус заявления вручную. Если вы желаете дальше пользоваться ботом и получать уведомления, введите пожалуйста исправленный Reference Number в следующем сообщении \uD83D\uDE0A";
 
+    public static final String CHECK_STATUS = "Узнать статус визового заявления";
 }
